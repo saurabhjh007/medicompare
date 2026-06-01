@@ -28,7 +28,9 @@ export const searchService = async (req, res) => {
     const { service } = req.query;
 
     if (!service) {
-      return res.status(400).json({ message: "Service name is required" });
+      return res.status(400).json({
+        message: "Service name is required",
+      });
     }
 
     const hospitals = await Hospital.find({
@@ -39,7 +41,9 @@ export const searchService = async (req, res) => {
 
     hospitals.forEach((hospital) => {
       hospital.services.forEach((item) => {
-        if (item.serviceName.toLowerCase().includes(service.toLowerCase())) {
+        if (
+          item.serviceName.toLowerCase().includes(service.toLowerCase())
+        ) {
           results.push({
             hospitalId: hospital._id,
             hospitalName: hospital.name,
@@ -48,6 +52,7 @@ export const searchService = async (req, res) => {
             rating: hospital.rating,
             serviceName: item.serviceName,
             price: item.price,
+            coordinates: hospital.coordinates,
           });
         }
       });
