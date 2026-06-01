@@ -3,6 +3,7 @@ import axios from "axios";
 import SearchBar from "../components/SearchBar.jsx";
 import HospitalCard from "../components/HospitalCard.jsx";
 import AppointmentModal from "../components/AppointmentModal.jsx";
+import MyAppointments from "./MyAppointments.jsx";
 
 function Dashboard() {
   const [service, setService] = useState("");
@@ -26,12 +27,15 @@ function Dashboard() {
 
     try {
       setLoading(true);
+
       const res = await axios.get(
         `http://localhost:5000/api/hospitals/search?service=${service}`
       );
+
       setResults(res.data);
     } catch (error) {
       alert("Something went wrong");
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -59,7 +63,9 @@ function Dashboard() {
       </div>
 
       <div className="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-xl shadow">
-        <h2 className="text-2xl font-semibold mb-4">Search Medical Service</h2>
+        <h2 className="text-2xl font-semibold mb-4">
+          Search Medical Service
+        </h2>
 
         <SearchBar
           service={service}
@@ -94,6 +100,10 @@ function Dashboard() {
             </div>
           </div>
         )}
+      </div>
+
+      <div className="max-w-4xl mx-auto">
+        <MyAppointments />
       </div>
 
       {selectedHospital && (
