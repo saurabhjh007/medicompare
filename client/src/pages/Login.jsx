@@ -3,24 +3,33 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
-  const [email, setEmail] = useState("saurabh@test.com");
-  const [password, setPassword] = useState("123456");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
 
   const login = async () => {
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        {
+          email,
+          password,
+        }
+      );
 
       localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem(
+        "user",
+        JSON.stringify(res.data.user)
+      );
 
       navigate("/dashboard");
-      window.location.reload();
     } catch (error) {
-      alert(error.response?.data?.message || "Login failed");
+      alert(
+        error.response?.data?.message ||
+          "Login failed"
+      );
     }
   };
 
@@ -32,16 +41,17 @@ function Login() {
         </h1>
 
         <input
-          className="w-full border p-3 rounded mb-3"
+          type="email"
           placeholder="Email"
+          className="w-full border p-3 rounded mb-4"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
-          className="w-full border p-3 rounded mb-4"
-          placeholder="Password"
           type="password"
+          placeholder="Password"
+          className="w-full border p-3 rounded mb-4"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -54,8 +64,11 @@ function Login() {
         </button>
 
         <p className="text-center mt-4">
-          New user?{" "}
-          <Link to="/register" className="text-blue-600 font-semibold">
+          Don't have an account?{" "}
+          <Link
+            to="/register"
+            className="text-blue-600 font-semibold"
+          >
             Register
           </Link>
         </p>

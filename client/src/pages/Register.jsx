@@ -6,17 +6,26 @@ function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
 
   const register = async () => {
+    if (!name || !email || !password) {
+      alert("Please fill all fields");
+      return;
+    }
+
     try {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+
       await axios.post("http://localhost:5000/api/auth/register", {
         name,
         email,
         password,
       });
 
-      alert("Registration successful");
+      alert("Registration successful. Please login now.");
       navigate("/");
     } catch (error) {
       alert(error.response?.data?.message || "Registration failed");
