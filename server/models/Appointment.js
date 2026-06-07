@@ -2,6 +2,12 @@ import mongoose from "mongoose";
 
 const appointmentSchema = new mongoose.Schema(
   {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
     patientName: {
       type: String,
       required: true,
@@ -25,9 +31,6 @@ const appointmentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Appointment = mongoose.model(
-  "Appointment",
-  appointmentSchema
-);
+const Appointment = mongoose.model("Appointment", appointmentSchema);
 
 export default Appointment;

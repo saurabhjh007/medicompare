@@ -3,6 +3,7 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Admin from "./pages/Admin.jsx";
+import Profile from "./pages/Profile.jsx";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -16,6 +17,11 @@ function App() {
         <Route
           path="/dashboard"
           element={token ? <Dashboard /> : <Navigate to="/" />}
+        />
+
+        <Route
+          path="/profile"
+          element={token ? <Profile /> : <Navigate to="/" />}
         />
 
         <Route path="/admin" element={<Admin />} />

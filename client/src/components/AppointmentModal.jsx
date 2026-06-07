@@ -5,6 +5,8 @@ function AppointmentModal({ selectedHospital, closeModal }) {
   const [patientName, setPatientName] = useState("");
   const [appointmentDate, setAppointmentDate] = useState("");
 
+  const user = JSON.parse(localStorage.getItem("user"));
+
   const bookAppointment = async () => {
     if (!patientName || !appointmentDate) {
       alert("Please fill all fields");
@@ -13,6 +15,7 @@ function AppointmentModal({ selectedHospital, closeModal }) {
 
     try {
       await axios.post("http://localhost:5000/api/appointments", {
+        userId: user.id,
         patientName,
         hospitalName: selectedHospital.hospitalName,
         serviceName: selectedHospital.serviceName,
@@ -23,7 +26,6 @@ function AppointmentModal({ selectedHospital, closeModal }) {
       closeModal();
     } catch (error) {
       alert("Appointment booking failed");
-      console.log(error);
     }
   };
 

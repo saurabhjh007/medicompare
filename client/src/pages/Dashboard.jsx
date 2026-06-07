@@ -1,9 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import SearchBar from "../components/SearchBar.jsx";
 import HospitalCard from "../components/HospitalCard.jsx";
 import AppointmentModal from "../components/AppointmentModal.jsx";
-import MyAppointments from "./MyAppointments.jsx";
 
 function Dashboard() {
   const [service, setService] = useState("");
@@ -12,12 +12,6 @@ function Dashboard() {
   const [selectedHospital, setSelectedHospital] = useState(null);
 
   const user = JSON.parse(localStorage.getItem("user"));
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    window.location.href = "/";
-  };
 
   const searchService = async () => {
     if (!service) {
@@ -35,7 +29,6 @@ function Dashboard() {
       setResults(res.data);
     } catch (error) {
       alert("Something went wrong");
-      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -54,18 +47,16 @@ function Dashboard() {
           <p>Welcome, {user?.name}</p>
         </div>
 
-        <button
-          onClick={logout}
-          className="bg-red-500 px-5 py-2 rounded-lg hover:bg-red-600"
+        <Link
+          to="/profile"
+          className="bg-white text-blue-600 px-5 py-2 rounded-lg font-semibold"
         >
-          Logout
-        </button>
+          Profile
+        </Link>
       </div>
 
       <div className="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-xl shadow">
-        <h2 className="text-2xl font-semibold mb-4">
-          Search Medical Service
-        </h2>
+        <h2 className="text-2xl font-semibold mb-4">Search Medical Service</h2>
 
         <SearchBar
           service={service}
@@ -89,7 +80,7 @@ function Dashboard() {
               </p>
             </div>
 
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {results.map((item) => (
                 <HospitalCard
                   key={item.hospitalId}
@@ -100,10 +91,6 @@ function Dashboard() {
             </div>
           </div>
         )}
-      </div>
-
-      <div className="max-w-4xl mx-auto">
-        <MyAppointments />
       </div>
 
       {selectedHospital && (
