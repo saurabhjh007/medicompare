@@ -3,6 +3,7 @@ import axios from "axios";
 
 function Admin() {
   const [hospitals, setHospitals] = useState([]);
+  const [appointments, setAppointments] = useState([]);
   const [editingHospital, setEditingHospital] = useState(null);
 
   const [formData, setFormData] = useState({
@@ -33,9 +34,34 @@ function Admin() {
     }
   };
 
+  const getAppointments = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/appointments");
+      setAppointments(res.data);
+    } catch (error) {
+      alert("Failed to fetch appointments");
+    }
+  };
+
   useEffect(() => {
     getHospitals();
+    getAppointments();
   }, []);
+
+  const getMRIPrices = () => {
+    return hospitals
+      .map((hospital) => {
+        const mri = hospital.services.find(
+          (service) => service.serviceName === "MRI Scan"
+        );
+        return mri?.price;
+      })
+      .filter((price) => price !== undefined);
+  };
+
+  const mriPrices = getMRIPrices();
+  const lowestMRI = mriPrices.length > 0 ? Math.min(...mriPrices) : 0;
+  const highestMRI = mriPrices.length > 0 ? Math.max(...mriPrices) : 0;
 
   const handleChange = (e) => {
     setFormData({
@@ -102,11 +128,21 @@ function Admin() {
   const startEdit = (hospital) => {
     setEditingHospital(hospital);
 
+    const mri = hospital.services.find(
+      (service) => service.serviceName === "MRI Scan"
+    );
+    const ct = hospital.services.find(
+      (service) => service.serviceName === "CT Scan"
+    );
+    const xray = hospital.services.find(
+      (service) => service.serviceName === "X-Ray"
+    );
+
     setEditData({
       rating: hospital.rating,
-      mriPrice: hospital.services[0]?.price || "",
-      ctPrice: hospital.services[1]?.price || "",
-      xrayPrice: hospital.services[2]?.price || "",
+      mriPrice: mri?.price || "",
+      ctPrice: ct?.price || "",
+      xrayPrice: xray?.price || "",
     });
   };
 
@@ -137,6 +173,36 @@ function Admin() {
       <div className="bg-purple-700 text-white py-5 px-8">
         <h1 className="text-3xl font-bold">MediCompare Admin Panel</h1>
         <p>Add, edit and manage hospital price data</p>
+      </div>
+
+      <div className="max-w-5xl mx-auto mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white p-5 rounded-xl shadow">
+          <p className="text-gray-500">Total Hospitals</p>
+          <h2 className="text-3xl font-bold text-purple-700">
+            {hospitals.length}
+          </h2>
+        </div>
+
+        <div className="bg-white p-5 rounded-xl shadow">
+          <p className="text-gray-500">Appointments</p>
+          <h2 className="text-3xl font-bold text-blue-700">
+            {appointments.length}
+          </h2>
+        </div>
+
+        <div className="bg-white p-5 rounded-xl shadow">
+          <p className="text-gray-500">Lowest MRI</p>
+          <h2 className="text-3xl font-bold text-green-700">
+            ₹{lowestMRI}
+          </h2>
+        </div>
+
+        <div className="bg-white p-5 rounded-xl shadow">
+          <p className="text-gray-500">Highest MRI</p>
+          <h2 className="text-3xl font-bold text-red-700">
+            ₹{highestMRI}
+          </h2>
+        </div>
       </div>
 
       <div className="max-w-5xl mx-auto mt-8 bg-white p-6 rounded-xl shadow">
