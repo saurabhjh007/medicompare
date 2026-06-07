@@ -49,6 +49,7 @@ export const searchService = async (req, res) => {
             hospitalName: hospital.name,
             address: hospital.address,
             city: hospital.city,
+            image: hospital.image,
             rating: hospital.rating,
             serviceName: item.serviceName,
             price: item.price,

@@ -1,42 +1,50 @@
 function HospitalCard({ item, onBook }) {
+  const defaultImage =
+    "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d";
+
   return (
-    <div className="border rounded-lg p-5 flex justify-between items-center bg-white">
-      <div>
-        <h4 className="text-lg font-bold">{item.hospitalName}</h4>
+    <div className="bg-white border rounded-xl shadow hover:shadow-lg transition overflow-hidden">
+      <img
+        src={item.image || defaultImage}
+        alt={item.hospitalName}
+        className="w-full h-48 object-cover"
+      />
 
-        <p className="text-gray-600">{item.address}</p>
+      <div className="p-5">
+        <div className="flex justify-between items-start">
+          <div>
+            <h4 className="text-xl font-bold">{item.hospitalName}</h4>
+            <p className="text-gray-600 mt-1">{item.address}</p>
+            <p className="text-sm text-gray-500">{item.city}</p>
+          </div>
 
-        <p className="text-sm text-gray-500">
-          {item.city} | Rating: ⭐ {item.rating}
-        </p>
+          <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-semibold">
+            ⭐ {item.rating}
+          </span>
+        </div>
 
-        <a
-          href={`https://www.google.com/maps?q=${item.coordinates.lat},${item.coordinates.lng}`}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-block mt-2 text-blue-600 font-semibold hover:underline"
-        >
-          📍 View on Google Maps
-        </a>
+        <div className="mt-4">
+          <p className="text-sm text-gray-500">{item.serviceName}</p>
+          <p className="text-3xl font-bold text-blue-600">₹{item.price}</p>
+        </div>
 
-        <br />
+        <div className="mt-5 flex gap-3">
+          <a
+            href={`https://www.google.com/maps?q=${item.coordinates.lat},${item.coordinates.lng}`}
+            target="_blank"
+            rel="noreferrer"
+            className="flex-1 text-center border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50"
+          >
+            View Map
+          </a>
 
-        <button
-          onClick={() => onBook(item)}
-          className="mt-3 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
-        >
-          Book Appointment
-        </button>
-      </div>
-
-      <div className="text-right">
-        <p className="text-2xl font-bold text-blue-600">
-          ₹{item.price}
-        </p>
-
-        <p className="text-sm text-gray-500">
-          {item.serviceName}
-        </p>
+          <button
+            onClick={() => onBook(item)}
+            className="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700"
+          >
+            Book
+          </button>
+        </div>
       </div>
     </div>
   );
