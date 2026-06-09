@@ -23,7 +23,7 @@ function Dashboard() {
       setLoading(true);
 
       const res = await axios.get(
-        `http://localhost:5000/api/hospitals/search?service=${service}`
+        `https://medicompare-7rv1.onrender.com/api/hospitals/search?service=${service}`
       );
 
       setResults(res.data);

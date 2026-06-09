@@ -19,7 +19,7 @@ function Register() {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
 
-      await axios.post("http://localhost:5000/api/auth/register", {
+      await axios.post("https://medicompare-7rv1.onrender.com/api/auth/register", {
         name,
         email,
         password,

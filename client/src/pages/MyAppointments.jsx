@@ -6,7 +6,7 @@ function MyAppointments() {
 
   const getAppointments = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/appointments");
+      const res = await axios.get("https://medicompare-7rv1.onrender.com/api/appointments");
       setAppointments(res.data);
     } catch (error) {
       alert("Failed to fetch appointments");

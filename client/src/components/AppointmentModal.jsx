@@ -14,7 +14,7 @@ function AppointmentModal({ selectedHospital, closeModal }) {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/appointments", {
+      await axios.post("https://medicompare-7rv1.onrender.com/api/appointments", {
         userId: user.id,
         patientName,
         hospitalName: selectedHospital.hospitalName,

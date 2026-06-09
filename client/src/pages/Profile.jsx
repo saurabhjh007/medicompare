@@ -9,7 +9,7 @@ function Profile() {
   const getAppointments = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/appointments?userId=${user.id}`
+        `https://medicompare-7rv1.onrender.com/api/appointments?userId=${user.id}`
       );
 
       setAppointments(res.data);
