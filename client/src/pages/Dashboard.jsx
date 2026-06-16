@@ -49,6 +49,24 @@ function Dashboard() {
     "Ultrasound",
   ];
 
+  const featuredHospitals = [
+    {
+      name: "Apollo Hospital",
+      location: "Sector 26, Noida",
+      rating: 4.8,
+    },
+    {
+      name: "Fortis Hospital",
+      location: "Sector 62, Noida",
+      rating: 4.3,
+    },
+    {
+      name: "Max Hospital",
+      location: "Sector 19, Noida",
+      rating: 4.4,
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Navbar */}
@@ -65,22 +83,25 @@ function Dashboard() {
             <a href="#dashboard" className="hover:text-blue-600">
               Dashboard
             </a>
+
             <a href="#services" className="hover:text-blue-600">
               Services
             </a>
+
             <Link to="/profile" className="hover:text-blue-600">
               Appointments
-            </Link>
-            <Link to="/admin" className="hover:text-blue-600">
-              Admin
             </Link>
           </div>
 
           <Link
             to="/profile"
-            className="bg-blue-600 text-white px-5 py-2 rounded-full font-semibold hover:bg-blue-700"
+            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-blue-700"
           >
-            {user?.name?.charAt(0).toUpperCase() || "U"} Profile
+            <div className="w-8 h-8 bg-white text-blue-600 rounded-full flex items-center justify-center font-bold">
+              {user?.name?.charAt(0).toUpperCase() || "U"}
+            </div>
+
+            <span>{user?.name || "Profile"}</span>
           </Link>
         </div>
       </div>
@@ -104,6 +125,22 @@ function Dashboard() {
             prices, view locations, and book appointments online.
           </p>
 
+          <div className="mt-6 flex flex-wrap gap-4">
+            <a
+              href="#services"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700"
+            >
+              Compare Prices
+            </a>
+
+            <Link
+              to="/profile"
+              className="border border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50"
+            >
+              My Appointments
+            </Link>
+          </div>
+
           <div className="mt-8 bg-white p-5 rounded-xl shadow">
             <SearchBar
               service={service}
@@ -125,6 +162,7 @@ function Dashboard() {
             <h3 className="font-bold text-xl text-gray-800">
               Save more on healthcare
             </h3>
+
             <p className="text-gray-600 mt-1">
               Compare prices before booking your appointment.
             </p>
@@ -186,6 +224,7 @@ function Dashboard() {
               <p className="font-semibold text-green-800">
                 Potential Savings: ₹{calculateSavings()}
               </p>
+
               <p className="text-sm text-green-700">
                 By choosing the lowest priced hospital.
               </p>
@@ -204,15 +243,38 @@ function Dashboard() {
         </section>
       )}
 
+      {/* Featured Hospitals */}
+      <section className="max-w-7xl mx-auto px-8 mt-10">
+        <h2 className="text-3xl font-bold mb-6">Featured Hospitals</h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {featuredHospitals.map((hospital) => (
+            <div
+              key={hospital.name}
+              className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
+            >
+              <h3 className="text-xl font-bold text-gray-900">
+                {hospital.name}
+              </h3>
+
+              <p className="text-gray-600 mt-2">{hospital.location}</p>
+
+              <p className="text-yellow-600 font-semibold mt-3">
+                ⭐ {hospital.rating}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Why Choose */}
       <section className="max-w-7xl mx-auto px-8 mt-10 pb-12">
         <h2 className="text-3xl font-bold mb-6">Why Choose MediCompare?</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <div className="bg-white p-6 rounded-xl shadow">
-            <h3 className="text-xl font-bold text-blue-700">
-              Compare Prices
-            </h3>
+            <h3 className="text-xl font-bold text-blue-700">Compare Prices</h3>
+
             <p className="text-gray-600 mt-2">
               Compare medical service prices across multiple hospitals before
               making a decision.
@@ -223,6 +285,7 @@ function Dashboard() {
             <h3 className="text-xl font-bold text-green-700">
               Trusted Hospitals
             </h3>
+
             <p className="text-gray-600 mt-2">
               View hospital ratings, locations, and available healthcare
               services.
@@ -233,12 +296,28 @@ function Dashboard() {
             <h3 className="text-xl font-bold text-purple-700">
               Easy Appointments
             </h3>
+
             <p className="text-gray-600 mt-2">
               Book appointments online and manage them from your profile page.
             </p>
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="bg-white border-t">
+        <div className="max-w-7xl mx-auto px-8 py-8">
+          <h2 className="text-xl font-bold text-blue-700">MediCompare</h2>
+
+          <p className="text-gray-600 mt-2">
+            Compare healthcare prices across trusted hospitals.
+          </p>
+
+          <p className="text-sm text-gray-500 mt-4">
+            © 2026 MediCompare. All rights reserved.
+          </p>
+        </div>
+      </footer>
 
       {selectedHospital && (
         <AppointmentModal
