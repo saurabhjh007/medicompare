@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function HospitalCard({ item, onBook }) {
   const defaultImage =
     "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d";
@@ -11,7 +13,7 @@ function HospitalCard({ item, onBook }) {
       />
 
       <div className="p-5">
-        <div className="flex justify-between items-start">
+        <div className="flex justify-between items-start gap-4">
           <div>
             <h4 className="text-xl font-bold">{item.hospitalName}</h4>
             <p className="text-gray-600 mt-1">{item.address}</p>
@@ -28,19 +30,26 @@ function HospitalCard({ item, onBook }) {
           <p className="text-3xl font-bold text-blue-600">₹{item.price}</p>
         </div>
 
-        <div className="mt-5 flex gap-3">
+        <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <Link
+            to={`/hospital/${item.hospitalId}`}
+            className="text-center bg-gray-900 text-white py-2 rounded-lg hover:bg-gray-800"
+          >
+            Details
+          </Link>
+
           <a
-            href={`https://www.google.com/maps?q=${item.coordinates.lat},${item.coordinates.lng}`}
+            href={`https://www.google.com/maps?q=${item.coordinates?.lat},${item.coordinates?.lng}`}
             target="_blank"
             rel="noreferrer"
-            className="flex-1 text-center border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50"
+            className="text-center border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50"
           >
-            View Map
+            Map
           </a>
 
           <button
             onClick={() => onBook(item)}
-            className="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700"
+            className="bg-green-600 text-white py-2 rounded-lg hover:bg-green-700"
           >
             Book
           </button>

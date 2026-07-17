@@ -2,6 +2,7 @@ import express from "express";
 import {
   addHospital,
   getHospitals,
+  getHospitalById,
   searchService,
   deleteHospital,
   updateHospital,
@@ -12,7 +13,8 @@ const router = express.Router();
 router.post("/", addHospital);
 router.get("/", getHospitals);
 router.get("/search", searchService);
-router.delete("/:id", deleteHospital);
+router.get("/:id", getHospitalById);
 router.put("/:id", updateHospital);
+router.delete("/:id", deleteHospital);
 
 export default router;
