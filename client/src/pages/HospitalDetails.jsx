@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api.js";
 import { Link, useParams } from "react-router-dom";
 import AppointmentModal from "../components/AppointmentModal.jsx";
 
@@ -9,6 +9,10 @@ function HospitalDetails() {
   const [hospital, setHospital] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedService, setSelectedService] = useState(null);
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
+
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const defaultImage =
     "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d";
@@ -16,8 +20,8 @@ function HospitalDetails() {
   useEffect(() => {
     const getHospital = async () => {
       try {
-        const res = await axios.get(
-          `https://medicompare-7rv1.onrender.com/api/hospitals/${id}`
+        const res = await api.get(
+          `/hospitals/${id}`
         );
 
         setHospital(res.data);
@@ -43,6 +47,34 @@ function HospitalDetails() {
       serviceName: service.serviceName,
       price: service.price,
     });
+  };
+
+  const submitReview = async () => {
+    if (!comment.trim()) {
+      alert("Please enter a comment");
+      return;
+    }
+
+    try {
+      const res = await api.post(`/hospitals/${id}/reviews`, {
+        userId: user.id || user._id,
+        userName: user.name,
+        rating,
+        comment,
+      });
+
+      setHospital((prev) => ({
+        ...prev,
+        reviews: res.data.reviews,
+        rating: res.data.rating,
+      }));
+
+      setComment("");
+      setRating(5);
+      alert("Review submitted successfully");
+    } catch (error) {
+      alert(error.response?.data?.message || "Failed to submit review");
+    }
   };
 
   if (loading) {
@@ -161,6 +193,81 @@ function HospitalDetails() {
                 </button>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* Reviews Section */}
+        <section className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Reviews List */}
+          <div className="md:col-span-2 bg-white rounded-2xl shadow p-8">
+            <h2 className="text-3xl font-bold mb-6">Patient Reviews</h2>
+            {!hospital.reviews || hospital.reviews.length === 0 ? (
+              <p className="text-gray-500">No reviews yet. Be the first to leave one!</p>
+            ) : (
+              <div className="space-y-6">
+                {hospital.reviews.map((review) => (
+                  <div key={review._id} className="border-b pb-6 last:border-b-0 last:pb-0">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h4 className="font-bold text-gray-900">{review.userName}</h4>
+                        <p className="text-xs text-gray-400">
+                          {new Date(review.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div className="flex text-yellow-500 font-semibold text-sm">
+                        {"★".repeat(review.rating)}
+                        {"☆".repeat(5 - review.rating)}
+                      </div>
+                    </div>
+                    <p className="text-gray-600 mt-2">{review.comment}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Add Review Form */}
+          <div className="bg-white rounded-2xl shadow p-8 h-fit">
+            <h3 className="text-2xl font-bold mb-4">Write a Review</h3>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Rating
+              </label>
+              <div className="flex gap-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    onClick={() => setRating(star)}
+                    className={`text-3xl transition ${
+                      star <= rating ? "text-yellow-500" : "text-gray-300"
+                    }`}
+                  >
+                    ★
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Comment
+              </label>
+              <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                rows="4"
+                placeholder="Share your experience..."
+                className="w-full border rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              ></textarea>
+            </div>
+
+            <button
+              onClick={submitReview}
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+            >
+              Submit Review
+            </button>
           </div>
         </section>
       </main>

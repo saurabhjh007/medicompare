@@ -1,9 +1,10 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../api.js";
 import { Link } from "react-router-dom";
 import SearchBar from "../components/SearchBar.jsx";
 import HospitalCard from "../components/HospitalCard.jsx";
 import AppointmentModal from "../components/AppointmentModal.jsx";
+import PriceComparisonChart from "../components/PriceComparisonChart.jsx";
 
 function Dashboard() {
   const [service, setService] = useState("");
@@ -23,8 +24,8 @@ function Dashboard() {
       setLoading(true);
       setService(serviceName);
 
-      const res = await axios.get(
-        `https://medicompare-7rv1.onrender.com/api/hospitals/search?service=${serviceName}`
+      const res = await api.get(
+        `/hospitals/search?service=${serviceName}`
       );
 
       setResults(res.data);
@@ -229,6 +230,8 @@ function Dashboard() {
                 By choosing the lowest priced hospital.
               </p>
             </div>
+
+            <PriceComparisonChart data={results} serviceName={service} />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {results.map((item) => (

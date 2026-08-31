@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api.js";
 
 function MyAppointments() {
   const [appointments, setAppointments] = useState([]);
 
   const getAppointments = async () => {
     try {
-      const res = await axios.get("https://medicompare-7rv1.onrender.com/api/appointments");
+      const res = await api.get("/appointments");
       setAppointments(res.data);
     } catch (error) {
       alert("Failed to fetch appointments");

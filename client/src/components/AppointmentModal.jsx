@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../api.js";
 
 function AppointmentModal({ selectedHospital, closeModal }) {
   const [patientName, setPatientName] = useState("");
@@ -14,7 +14,7 @@ function AppointmentModal({ selectedHospital, closeModal }) {
     }
 
     try {
-      await axios.post("https://medicompare-7rv1.onrender.com/api/appointments", {
+      await api.post("/appointments", {
         userId: user.id,
         patientName,
         hospitalName: selectedHospital.hospitalName,

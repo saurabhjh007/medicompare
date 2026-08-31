@@ -129,3 +129,38 @@ export const getHospitalById = async (req, res) => {
     });
   }
 };
+
+export const addHospitalReview = async (req, res) => {
+  try {
+    const { userId, userName, rating, comment } = req.body;
+    const { id } = req.params;
+
+    if (!userId || !userName || !rating || !comment) {
+      return res.status(400).json({ message: "All review fields are required" });
+    }
+
+    const hospital = await Hospital.findById(id);
+
+    if (!hospital) {
+      return res.status(404).json({ message: "Hospital not found" });
+    }
+
+    // Add review
+    const newReview = { userId, userName, rating: Number(rating), comment };
+    hospital.reviews.push(newReview);
+
+    // Recalculate average rating
+    const totalRating = hospital.reviews.reduce((sum, rev) => sum + rev.rating, 0);
+    hospital.rating = parseFloat((totalRating / hospital.reviews.length).toFixed(1));
+
+    await hospital.save();
+
+    res.status(201).json({
+      message: "Review added successfully",
+      reviews: hospital.reviews,
+      rating: hospital.rating,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

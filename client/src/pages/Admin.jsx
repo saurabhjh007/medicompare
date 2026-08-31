@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api.js";
 
 function Admin() {
   const [hospitals, setHospitals] = useState([]);
@@ -27,7 +27,7 @@ function Admin() {
 
   const getHospitals = async () => {
     try {
-      const res = await axios.get("https://medicompare-7rv1.onrender.com/api/hospitals");
+      const res = await api.get("/hospitals");
       setHospitals(res.data);
     } catch (error) {
       alert("Failed to fetch hospitals");
@@ -36,7 +36,7 @@ function Admin() {
 
   const getAppointments = async () => {
     try {
-      const res = await axios.get("https://medicompare-7rv1.onrender.com/api/appointments");
+      const res = await api.get("/appointments");
       setAppointments(res.data);
     } catch (error) {
       alert("Failed to fetch appointments");
@@ -79,7 +79,7 @@ function Admin() {
 
   const addHospital = async () => {
     try {
-      await axios.post("https://medicompare-7rv1.onrender.com/api/hospitals", {
+      await api.post("/hospitals", {
         name: formData.name,
         address: formData.address,
         city: formData.city,
@@ -117,7 +117,7 @@ function Admin() {
 
   const deleteHospital = async (id) => {
     try {
-      await axios.delete(`https://medicompare-7rv1.onrender.com/api/hospitals/${id}`);
+      await api.delete(`/hospitals/${id}`);
       alert("Hospital deleted successfully");
       getHospitals();
     } catch (error) {
@@ -148,8 +148,8 @@ function Admin() {
 
   const updateHospital = async () => {
     try {
-      await axios.put(
-        `https://medicompare-7rv1.onrender.com/api/hospitals/${editingHospital._id}`,
+      await api.put(
+        `/hospitals/${editingHospital._id}`,
         {
           rating: Number(editData.rating),
           services: [

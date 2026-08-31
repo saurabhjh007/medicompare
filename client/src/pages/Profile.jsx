@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api.js";
 import { Link } from "react-router-dom";
 
 function Profile() {
@@ -8,8 +8,8 @@ function Profile() {
 
   const getAppointments = async () => {
     try {
-      const res = await axios.get(
-        `https://medicompare-7rv1.onrender.com/api/appointments?userId=${user.id}`
+      const res = await api.get(
+        `/appointments?userId=${user.id}`
       );
 
       setAppointments(res.data);
