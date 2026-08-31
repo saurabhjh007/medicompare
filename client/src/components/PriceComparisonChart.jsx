@@ -26,15 +26,15 @@ function PriceComparisonChart({ data, serviceName }) {
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white p-4 rounded-xl shadow-lg border border-gray-100">
-          <p className="font-bold text-gray-800">{payload[0].payload.name}</p>
-          <p className="text-sm text-gray-500">{payload[0].payload.city}</p>
-          <p className="text-lg font-extrabold text-blue-600 mt-1">
-            ₹{payload[0].value}
+        <div className="bg-slate-900/90 backdrop-blur-md text-white p-4 rounded-2xl shadow-xl border border-slate-700/50">
+          <p className="font-bold text-sm">{payload[0].payload.name}</p>
+          <p className="text-xs text-slate-400">{payload[0].payload.city}</p>
+          <p className="text-xl font-extrabold text-indigo-400 mt-1">
+            ₹{payload[0].value.toLocaleString()}
           </p>
           {payload[0].value === lowestPrice && (
-            <span className="inline-block bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-semibold mt-1">
-              Cheapest Option!
+            <span className="inline-block bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] px-2.5 py-0.5 rounded-full font-semibold mt-1.5">
+              ✨ Lowest Price Option
             </span>
           )}
         </div>
@@ -44,22 +44,22 @@ function PriceComparisonChart({ data, serviceName }) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow border border-gray-100 mb-8">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+    <div className="bg-slate-50/80 rounded-2xl p-5 sm:p-6 border border-slate-200/80 mb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
-          <h3 className="text-xl font-bold text-gray-900">Price Spread Visualizer</h3>
-          <p className="text-sm text-gray-500 mt-0.5">
-            Comparing rates for <span className="font-semibold text-blue-600">{serviceName}</span>
+          <h4 className="text-lg font-bold text-slate-900">Price Spread Visualizer</h4>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Comparing procedure charges for <span className="font-semibold text-indigo-600">{serviceName}</span>
           </p>
         </div>
-        <div className="flex gap-4 text-xs font-medium">
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 bg-emerald-500 rounded-sm"></div>
-            <span className="text-gray-600">Cheapest Price</span>
+        <div className="flex gap-4 text-xs font-semibold">
+          <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-2xs">
+            <span className="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
+            <span className="text-slate-600">Cheapest Provider</span>
           </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 bg-blue-500 rounded-sm"></div>
-            <span className="text-gray-600">Standard Price</span>
+          <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-2xs">
+            <span className="w-2.5 h-2.5 bg-indigo-600 rounded-full"></span>
+            <span className="text-slate-600">Standard Rate</span>
           </div>
         </div>
       </div>
@@ -70,29 +70,29 @@ function PriceComparisonChart({ data, serviceName }) {
             data={chartData}
             margin={{ top: 10, right: 10, left: -10, bottom: 20 }}
           >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
             <XAxis
               dataKey="name"
               tickLine={false}
               axisLine={false}
-              tick={{ fill: "#6b7280", fontSize: 12 }}
+              tick={{ fill: "#64748b", fontSize: 12, fontWeight: 500 }}
               interval={0}
               tickFormatter={(value) =>
-                value.length > 15 ? `${value.substring(0, 15)}...` : value
+                value.length > 14 ? `${value.substring(0, 14)}...` : value
               }
             />
             <YAxis
               tickLine={false}
               axisLine={false}
-              tick={{ fill: "#6b7280", fontSize: 12 }}
+              tick={{ fill: "#64748b", fontSize: 12, fontWeight: 500 }}
               tickFormatter={(value) => `₹${value}`}
             />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: "#f9fafb" }} />
-            <Bar dataKey="price" radius={[4, 4, 0, 0]} maxBarSize={60}>
+            <Tooltip content={<CustomTooltip />} cursor={{ fill: "#f1f5f9", radius: 8 }} />
+            <Bar dataKey="price" radius={[8, 8, 0, 0]} maxBarSize={48}>
               {chartData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={entry.price === lowestPrice ? "#10b981" : "#3b82f6"}
+                  fill={entry.price === lowestPrice ? "#10b981" : "#4f46e5"}
                 />
               ))}
             </Bar>

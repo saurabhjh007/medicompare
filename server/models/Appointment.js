@@ -18,14 +18,34 @@ const appointmentSchema = new mongoose.Schema(
       required: true,
     },
 
+    hospitalAddress: {
+      type: String,
+      default: "Main Hospital Facility",
+    },
+
     serviceName: {
       type: String,
       required: true,
     },
 
+    price: {
+      type: Number,
+      default: 0,
+    },
+
     appointmentDate: {
       type: String,
       required: true,
+    },
+
+    bookingRef: {
+      type: String,
+      unique: true,
+    },
+
+    status: {
+      type: String,
+      default: "Confirmed",
     },
   },
   { timestamps: true }

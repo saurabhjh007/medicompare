@@ -1,5 +1,5 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
 
 @theme {
   --font-sans: 'Outfit', sans-serif;
@@ -33,4 +33,33 @@ body {
   font-family: var(--font-sans);
   background-color: #f8fafc;
   color: #0f172a;
+}
+
+/* Dedicated Print Stylesheet for Appointment Slips */
+@media print {
+  body {
+    background: #ffffff !important;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  #printable-slip,
+  #printable-slip * {
+    visibility: visible;
+  }
+
+  #printable-slip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 24px !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+  }
 }

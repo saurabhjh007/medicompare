@@ -2,7 +2,12 @@ import Appointment from "../models/Appointment.js";
 
 export const createAppointment = async (req, res) => {
   try {
-    const appointment = await Appointment.create(req.body);
+    const bookingData = { ...req.body };
+    if (!bookingData.bookingRef) {
+      bookingData.bookingRef = `MED-${Math.floor(100000 + Math.random() * 900000)}`;
+    }
+
+    const appointment = await Appointment.create(bookingData);
 
     res.status(201).json({
       message: "Appointment booked successfully",
