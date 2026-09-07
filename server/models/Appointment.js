@@ -47,6 +47,32 @@ const appointmentSchema = new mongoose.Schema(
       type: String,
       default: "Confirmed",
     },
+
+    paymentStatus: {
+      type: String,
+      enum: ["PAID", "PENDING", "PAY_AT_HOSPITAL"],
+      default: "PAID",
+    },
+
+    paymentId: {
+      type: String,
+      default: "",
+    },
+
+    orderId: {
+      type: String,
+      default: "",
+    },
+
+    paymentMethod: {
+      type: String,
+      default: "Razorpay Online",
+    },
+
+    paidAmount: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

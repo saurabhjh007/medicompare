@@ -142,10 +142,22 @@ function Profile() {
                       className="group bg-slate-50 hover:bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/80 hover:border-indigo-200 hover:shadow-md transition-all duration-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                     >
                       <div className="space-y-1.5">
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                           <span className="bg-emerald-100 text-emerald-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                             {item.status || "Confirmed"}
                           </span>
+
+                          {item.paymentStatus === "PAID" || item.paymentStatus === "Paid" || (item.paymentId && !item.paymentId.includes("PAY_AT_HOSPITAL")) ? (
+                            <span className="bg-indigo-50 border border-indigo-200 text-indigo-700 text-[11px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+                              Paid (Razorpay)
+                            </span>
+                          ) : (
+                            <span className="bg-amber-50 border border-amber-200 text-amber-700 text-[11px] font-bold px-2 py-0.5 rounded-full">
+                              Pay at Desk
+                            </span>
+                          )}
+
                           <span className="text-xs font-mono text-slate-400">
                             {item.bookingRef || `MED-${item._id.slice(-6).toUpperCase()}`}
                           </span>
@@ -166,6 +178,9 @@ function Profile() {
                           {item.price ? (
                             <span>Rate: <strong className="text-emerald-600">₹{item.price.toLocaleString()}</strong></span>
                           ) : null}
+                          {item.paymentId && (
+                            <span className="font-mono text-slate-400">Txn: {item.paymentId}</span>
+                          )}
                         </div>
                       </div>
 

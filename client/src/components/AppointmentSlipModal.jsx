@@ -7,8 +7,15 @@ function AppointmentSlipModal({ appointment, onClose }) {
     appointment.bookingRef ||
     `MED-${(appointment._id || Date.now().toString()).slice(-6).toUpperCase()}`;
 
+  const isPaid =
+    appointment.paymentStatus === "PAID" ||
+    appointment.paymentStatus === "Paid" ||
+    (appointment.paymentId && !appointment.paymentId.includes("PAY_AT_HOSPITAL"));
+
+  const paymentId = appointment.paymentId || (isPaid ? `pay_sim_${Date.now().toString().slice(-8)}` : "Pending Desk Payment");
+
   const qrData = encodeURIComponent(
-    `MEDICOMPARE-VERIFIED|REF:${bookingRef}|PATIENT:${appointment.patientName}|HOSPITAL:${appointment.hospitalName}|SERVICE:${appointment.serviceName}|DATE:${appointment.appointmentDate}`
+    `MEDICOMPARE-VERIFIED|REF:${bookingRef}|PATIENT:${appointment.patientName}|HOSPITAL:${appointment.hospitalName}|SERVICE:${appointment.serviceName}|DATE:${appointment.appointmentDate}|PAY_STATUS:${isPaid ? "PAID" : "DESK"}|TXN:${paymentId}`
   );
 
   const handlePrint = () => {
@@ -40,9 +47,18 @@ function AppointmentSlipModal({ appointment, onClose }) {
             </div>
 
             <div className="text-right">
-              <span className="inline-block bg-slate-100 border border-slate-200 text-slate-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                {appointment.status || "Confirmed"}
-              </span>
+              {isPaid ? (
+                <span className="inline-flex items-center gap-1 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                  <svg className="w-3 h-3 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  PAID ONLINE
+                </span>
+              ) : (
+                <span className="inline-block bg-amber-50 border border-amber-200 text-amber-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                  PAY AT DESK
+                </span>
+              )}
               <p className="text-[11px] font-mono text-slate-400 mt-1">
                 Ref: <span className="font-bold text-slate-700">{bookingRef}</span>
               </p>
@@ -104,7 +120,7 @@ function AppointmentSlipModal({ appointment, onClose }) {
             </div>
           </div>
 
-          {/* Hospital & Pricing Info */}
+          {/* Hospital & Pricing / Transaction Info */}
           <div className="py-5 border-b border-slate-200 space-y-3">
             <div className="flex justify-between items-start">
               <div>
@@ -122,13 +138,29 @@ function AppointmentSlipModal({ appointment, onClose }) {
               {appointment.price ? (
                 <div className="text-right">
                   <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                    Guaranteed Rate
+                    {isPaid ? "Amount Paid" : "Payable Amount"}
                   </span>
                   <p className="text-xl font-extrabold text-emerald-600">
                     ₹{appointment.price.toLocaleString()}
                   </p>
                 </div>
               ) : null}
+            </div>
+
+            {/* Payment & Transaction Metadata */}
+            <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/60 grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <span className="text-slate-400 font-medium">Payment Gateway:</span>
+                <p className="font-semibold text-slate-700">
+                  {appointment.paymentMethod || (isPaid ? "Razorpay Gateway" : "Counter Settlement")}
+                </p>
+              </div>
+              <div className="text-right">
+                <span className="text-slate-400 font-medium">Transaction Ref:</span>
+                <p className="font-mono font-semibold text-slate-700 truncate">
+                  {paymentId}
+                </p>
+              </div>
             </div>
           </div>
 
@@ -137,7 +169,7 @@ function AppointmentSlipModal({ appointment, onClose }) {
             <p className="font-semibold text-slate-700">Patient Instructions:</p>
             <ul className="list-disc pl-4 space-y-0.5 text-[11px]">
               <li>Present this QR code or booking reference at the hospital admission desk.</li>
-              <li>Please arrive 15 minutes prior to your scheduled slot with a valid government ID.</li>
+              <li>Please arrive 15 minutes prior to your scheduled slot with a valid ID proof.</li>
               <li>Pre-locked rate guaranteed via MediCompare transparency network.</li>
             </ul>
           </div>
@@ -159,7 +191,7 @@ function AppointmentSlipModal({ appointment, onClose }) {
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
             </svg>
-            <span>Print / Save PDF</span>
+            <span>Print / Save Receipt</span>
           </button>
         </div>
       </div>
