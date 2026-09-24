@@ -96,6 +96,9 @@ function Dashboard() {
             <a href="#dashboard" className="px-4 py-1.5 rounded-full bg-white text-indigo-600 shadow-xs font-semibold">
               Dashboard
             </a>
+            <Link to="/scan-prescription" className="px-4 py-1.5 rounded-full text-indigo-700 bg-indigo-50/70 hover:bg-indigo-100 font-semibold transition-colors flex items-center gap-1.5">
+              <span>✨</span> AI Prescription
+            </Link>
             <a href="#services" className="px-4 py-1.5 rounded-full hover:text-indigo-600 transition-colors">
               Services
             </a>
@@ -145,6 +148,18 @@ function Dashboard() {
               searchService={() => searchService()}
               loading={loading}
             />
+
+            <div className="mt-3.5 pt-3.5 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-500">
+              <span className="flex items-center gap-1.5">
+                <span className="text-sm">📄</span> Have a doctor's prescription slip?
+              </span>
+              <Link
+                to="/scan-prescription"
+                className="font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 hover:underline self-start sm:self-auto"
+              >
+                Scan & extract tests with AI →
+              </Link>
+            </div>
           </div>
         </div>
 

@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Admin from "./pages/Admin.jsx";
 import Profile from "./pages/Profile.jsx";
 import HospitalDetails from "./pages/HospitalDetails.jsx";
+import PrescriptionScanner from "./pages/PrescriptionScanner.jsx";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -18,6 +19,11 @@ function App() {
         <Route
           path="/dashboard"
           element={token ? <Dashboard /> : <Navigate to="/" />}
+        />
+
+        <Route
+          path="/scan-prescription"
+          element={token ? <PrescriptionScanner /> : <Navigate to="/" />}
         />
 
         <Route
